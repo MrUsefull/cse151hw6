@@ -1,8 +1,12 @@
 import math
 
-def dOft(t): 
+def errOft(t):
 	
-	return;
+	return
+
+def alphaOft(t): 
+	
+	return .5 * log((1 - errOft(t)) / errOf(t))
 
 f = open("hw6train.txt", "r")
 training_data = []
