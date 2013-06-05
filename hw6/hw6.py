@@ -17,7 +17,7 @@ def errOft(h, D):
 def alphaOft(t, D): 	
 	return .5 * log((1 - errOft(h[t], D)) / errOf(h[t], D))
 
-#returns result of classifying example x with classifier t
+#returns result of classifying email x
 def h(t, x):
 	res = 0;
 	if x[t] == 1:
@@ -30,7 +30,7 @@ def hMinus(t, x):
 
 def final_classifier(x):
 	sum = 0
-	for t in range(1, T):
+	for t in range(1, len(h)):
 		sum = sum + alphaOft(t)*h(t, x)
 	
 	if sum < 0:
@@ -43,5 +43,12 @@ training_data = []
 line = f.readline()
 while (line):
 	training_data.append(line.split())
+	line = f.readline()
+
+f = open("hw6test.txt", "r")
+test_data = []
+line = f.readline()
+while (line):
+	test_data.append(line.split())
 	line = f.readline()
 
