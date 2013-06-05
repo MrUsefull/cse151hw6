@@ -19,8 +19,14 @@ def alphaOft(t, D):
 
 #returns result of classifying example x with classifier t
 def h(t, x):
+	res = 0;
+	if x[t] == 1:
+		return 1
+	else:
+		return -1
 
-	return
+def hMinus(t, x):
+	return -1*h(t,x)
 
 def final_classifier(x):
 	sum = 0
