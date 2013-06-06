@@ -82,6 +82,11 @@ for i in len(training_data):
 	D[0][i] = 1/len(training_data)
 
 #fill in the rest of D
-for t in range(0,T):
-	fill_in_D_of_tplus1(D, t, training_data)
+t = 0
+while t < T:
+	fill_in_D_of_tplus1(D, t, training_data, 1)
+	t = t + 1
+	fill_in_D_of_tplus1(D, t, training_data, -1)
+	t = t + 1
+
 
