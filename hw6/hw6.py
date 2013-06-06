@@ -7,13 +7,13 @@ def errOft(t, plusminus, data):
 		# email[-1] is the actual label of this email;
 		# h(t,email,plusminus) is the result this classifier 
 		#	returns for this email
-		if h(t, email, plusminus) is not email[-1]: 
+		if (h(t, email, plusminus) * int(email[-1])) < 0: 
 			mistakes = mistakes + 1
-	return mistakes/len(data)
+	return float(mistakes)/len(data)
 
 def alphaOft(t, plusminus, data): 
 	error = errOft(t, plusminus, data)
-	return .5 * log((1 - error) / error)
+	return .5 * math.log((1 - error) / error)
 
 def fill_in_D_of_tplus1(D, t, data, plusminus):
 	# D is the 2-dimensional D matrix
@@ -22,16 +22,10 @@ def fill_in_D_of_tplus1(D, t, data, plusminus):
 	# i is the email in set data that we are considering
 	# data[i][-1] is the actual label of the email we are considering
 	# h(t, i, plusminus) is the predicted label
-	for i in len(D):
+	for i in range (0,len(D)-1):
 		zt = z(D, t, i, data, plusminus)
-		D[t+1][i] = (D[t][i] * math.e ** -(alphaOft(t, plusminus, data)*data[i][-1]*h(t, i, plusminus)) / zt
+		D[t+1][i] = (D[t][i] * math.e ** (-1*alphaOft(t, plusminus, data)*int(data[i][-1])*h(t, data[i], plusminus))) / zt
 	
-# TODO: revise
-def z(D, t, i, data, plusminus):
-	total = 0
-	for i in range(0, len(D[t])):
-		total = total + D[t][i] * math.e ** (alphaOft(t, plusminus, data) * data[i][-1]*h(t, i, plusminus)
-	return total
 
 #if h+ classifier: returns 1 if word t is contained in email x; -1 otherwise.
 #if h- classifier: returns -1 if word t is contained in email x; 1 otherwise.
@@ -46,6 +40,15 @@ def h(t, x, plusminus):
 		return res
 	else:
 		return -res
+
+# TODO: revise
+def z(D, t, i, data, plusminus):
+	total = 0
+	for i in range(0, len(D[t])):
+		total = total + D[t][i] * math.e ** (alphaOft(t, plusminus, data) * int(data[i][-1])*h(t, data[i], plusminus))
+		print "alpha:"+str(alphaOft(t, plusminus, data))
+		print "h*l:"+str(int(data[i][-1])*h(t, data[i], plusminus))
+	return total
 
 #TODO: revise
 def final_classifier(x):
@@ -74,12 +77,16 @@ while (line):
 
 
 #training data
-T = raw_input("Number of passes (training): ")
+T = int(raw_input("Number of passes (training): "))
 
 #initialize D
-D = [][]
-for i in len(training_data):
-	D[0][i] = 1/len(training_data)
+D = []
+a = []
+b = []
+for i in range(0,len(training_data)-1):
+	a.append(float(1)/len(training_data))
+D.append(a)
+D.append(b)
 
 #fill in the rest of D
 t = 0
@@ -88,5 +95,5 @@ while t < T:
 	t = t + 1
 	fill_in_D_of_tplus1(D, t, training_data, -1)
 	t = t + 1
-
+print D
 
